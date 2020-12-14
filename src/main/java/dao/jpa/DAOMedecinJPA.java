@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import config.Context;
 import dao.IDAOMedecin;
 import model.Medecin;
+import model.Medecin;
 
 
 public class DAOMedecinJPA implements IDAOMedecin {
@@ -15,9 +16,9 @@ public class DAOMedecinJPA implements IDAOMedecin {
 	@Override
 	public Medecin findById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Medecin m = em.find(Medecin.class, id);
+		Medecin s = em.find(Medecin.class, id);
 		em.close();
-		return m;
+		return s;
 	}
 
 	@Override
@@ -50,47 +51,17 @@ public class DAOMedecinJPA implements IDAOMedecin {
 		return objet;
 	}
 
-	@Override
-	public void delete(Medecin objet) {
-		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		em.getTransaction().begin();
-		objet=em.merge(objet);
 
-		em.remove(objet);
-
-		em.getTransaction().commit();
-		em.close();
-	}
 	@Override
 	public void deleteById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
-		Medecin d=em.find(Admin.class, id);
+		Medecin s=em.find(Medecin.class, id);
 		
-		em.remove(d);
+		em.remove(s);
 		
 		em.getTransaction().commit();
 		em.close();
-	}
-
-	public Medecin findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void insert(Medecin objet) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Medecin update(Medecin objet) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void delete(Medecin objet) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	

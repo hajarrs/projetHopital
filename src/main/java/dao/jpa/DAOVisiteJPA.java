@@ -50,18 +50,6 @@ public class DAOVisiteJPA implements IDAOVisite {
 		return objet;
 	}
 
-	@Override
-	public void delete(Visite objet) {
-		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		em.getTransaction().begin();
-		objet=em.merge(objet);
-
-		em.remove(objet);
-
-		em.getTransaction().commit();
-		em.close();
-	}
-
 	
 	@Override
 	public void deleteById(Integer id) {

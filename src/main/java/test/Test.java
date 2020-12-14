@@ -2,6 +2,9 @@ package test;
 
 import java.util.Scanner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import config.Context;
 import dao.jpa.DAOCompteJPA;
 import model.*;
@@ -12,9 +15,11 @@ public class Test {
 	
 	public static void baseHopital() {
 
-		Medecin m1 = new Medecin(1, "magali1", "123456");
-		Medecin m2 = new Medecin(2, "magali2", "123456");
-		Secretaire s = new Secretaire(1, "hajars", "hajar1");
+		Medecin m1 = new Medecin("magali1", "123456");
+		m1.setSalle(1);
+		Medecin m2 = new Medecin("magali2", "123456");
+		m2.setSalle(2);
+		Secretaire s = new Secretaire("hajars", "hajar1");
 		
 		Context.getInstance().getDaoCompte().insert(m1);
 		Context.getInstance().getDaoCompte().insert(m2);
@@ -47,11 +52,11 @@ public class Test {
 	
 	private static void menuGlobal() {
 		System.out.println("------------------------------------------------");
-		int choix = saisieInt("Bienvenue dans l'application de l'hopital\nSe connecter:\n");
-		String pseudo= saisieString("Pseudo:");
+		System.out.println("Bienvenue dans l'application de l'hopital\nSe connecter:\n");
+		String login= saisieString("Login:");
 		String password=saisieString("Password:");
 		try{
-			connected=DAOCompteJPA.checkConnect(pseudo,password); 
+			connected=DAOCompteJPA.checkConnect(login,password); 
 			System.out.println(connected);
 		}catch(Exception e) {
 			System.out.println("Mauvais identifiants");
@@ -75,12 +80,11 @@ public class Test {
 	}
 
 	private static void menuMedecin() {
-		// TODO Auto-generated method stub
+		System.out.println("Hello medecin");
 		
 	}
 	private static void menuSecretaire() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Hello secretaire");
 	}
 
 	

@@ -22,7 +22,7 @@ import model.Patient;
 public class Context {
 	
 	private static Context _instance;
-	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("hopital");
+	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("projetHopital");
 
 	private LinkedList<Patient> fileAttente = new LinkedList<>();
 

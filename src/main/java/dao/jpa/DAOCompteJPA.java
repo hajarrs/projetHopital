@@ -62,12 +62,12 @@ public class DAOCompteJPA implements IDAOCompte {
 		em.close();
 	}
 	
-	public static Compte checkConnect(String pseudo, String password) {
+	public static Compte checkConnect(String login, String password) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Compte c where c.password=:password and c.pseudo=:pseudo",Compte.class);
+		Query maRequete = em.createQuery("from Compte c where c.password=:password and c.login=:login",Compte.class);
 
-		maRequete.setParameter("pseudo", pseudo);
+		maRequete.setParameter("login", login);
 		maRequete.setParameter("password", password);
 
 		return (Compte)maRequete.getSingleResult();

@@ -1,14 +1,19 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue("Medecin")
 public class Medecin extends Compte{
 	
 	private int salle;
-	
+	@OneToMany(mappedBy = "medecin")
+	private List<Visite> visite = new ArrayList();
 	public int getSalle() {
 		return salle;
 	}
@@ -23,9 +28,19 @@ public class Medecin extends Compte{
 		
 	}
 
-	public Medecin(int id, String login, String password) {
-		super(id, login, password);
+	public Medecin(String login, String password) {
+		super(login, password);
 		
 	}
+
+	public List<Visite> getVisite() {
+		return visite;
+	}
+
+	public void setVisite(List<Visite> visite) {
+		this.visite = visite;
+	}
+	
+	
 
 }

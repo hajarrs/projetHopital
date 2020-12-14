@@ -21,6 +21,30 @@ public class Adresse {
 	public Adresse() {
 		
 	}
+	public int getNumero() {
+		return numero;
+	}
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
+	public String getVoie() {
+		return voie;
+	}
+	public void setVoie(String voie) {
+		this.voie = voie;
+	}
+	public String getVille() {
+		return ville;
+	}
+	public void setVille(String ville) {
+		this.ville = ville;
+	}
+	public int getCp() {
+		return cp;
+	}
+	public void setCp(int cp) {
+		this.cp = cp;
+	}
 	
 	
 

@@ -1,8 +1,12 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 
@@ -16,6 +20,8 @@ public class Patient {
 	@Embedded
 	private Adresse adresse;
 	
+	@OneToMany(mappedBy = "patient")
+	private List<Visite> visite=new ArrayList();;
 	
 	public Patient(int numeroSecu, String nom, String prenom) {
 		super();

@@ -6,31 +6,30 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import config.Context;
-import dao.IDAOMedecin;
-import model.Album;
+import dao.IDAOPatient;
+import model.Patient;
 
-public class DAOPatientJPA implements IDAOMedecin {
-
+public class DAOPatientJPA implements IDAOPatient{
 	@Override
-	public Album findById(Integer id) {
+	public Patient findById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Album b = em.find(Album.class, id);
+		Patient p = em.find(Patient.class, id);
 		em.close();
-		return b;
+		return p;
 	}
 
 	@Override
-	public List<Album> findAll() {
+	public List<Patient> findAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Album",Album.class);
+		Query maRequete = em.createQuery("from Patient",Patient.class);
 
 		return maRequete.getResultList();
 	}
 
 
 	@Override
-	public void insert(Album objet) {
+	public void insert(Patient objet) {
 
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
@@ -40,7 +39,7 @@ public class DAOPatientJPA implements IDAOMedecin {
 	}
 
 	@Override
-	public Album update(Album objet) {
+	public Patient update(Patient objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -50,7 +49,7 @@ public class DAOPatientJPA implements IDAOMedecin {
 	}
 
 	@Override
-	public void delete(Album objet) {
+	public void delete(Patient objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -60,17 +59,26 @@ public class DAOPatientJPA implements IDAOMedecin {
 		em.getTransaction().commit();
 		em.close();
 	}
-
-	
 	@Override
 	public void deleteById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
-		Album d=em.find(Album.class, id);
+		Patient p=em.find(Patient.class, id);
 		
-		em.remove(d);
+		em.remove(p);
 		
 		em.getTransaction().commit();
 		em.close();
 	}
+
+	@Override
+	public Patient selectById(Integer id) {
+		EntityManager em=Context.getInstance().getEmf().createEntityManager();
+		Query maBiblio = em.createQuery("from patient where idCompte= :id",Patient.class);
+		return (Patient) maBiblio.getResultStream();
+	}
+
 }
+
+
+

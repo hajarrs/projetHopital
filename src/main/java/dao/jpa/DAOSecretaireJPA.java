@@ -7,30 +7,32 @@ import javax.persistence.Query;
 
 import config.Context;
 import dao.IDAOSecretaire;
-import model.Admin;
+import model.Secretaire;
 
-public class DAOSecretaireJPA implements IDAOSecretaire {
+
+public class DAOSecretaireJPA implements IDAOSecretaire{
+
 
 	@Override
-	public Admin findById(Integer id) {
+	public Secretaire findById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Admin b = em.find(Admin.class, id);
+		Secretaire s = em.find(Secretaire.class, id);
 		em.close();
-		return b;
+		return s;
 	}
 
 	@Override
-	public List<Admin> findAll() {
+	public List<Secretaire> findAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Admin",Admin.class);
+		Query maRequete = em.createQuery("from Secretaire",Secretaire.class);
 
 		return maRequete.getResultList();
 	}
 
 
 	@Override
-	public void insert(Admin objet) {
+	public void insert(Secretaire objet) {
 
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
@@ -40,7 +42,7 @@ public class DAOSecretaireJPA implements IDAOSecretaire {
 	}
 
 	@Override
-	public Admin update(Admin objet) {
+	public Secretaire update(Secretaire objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -50,7 +52,7 @@ public class DAOSecretaireJPA implements IDAOSecretaire {
 	}
 
 	@Override
-	public void delete(Admin objet) {
+	public void delete(Secretaire objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -64,13 +66,11 @@ public class DAOSecretaireJPA implements IDAOSecretaire {
 	public void deleteById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
-		Admin d=em.find(Admin.class, id);
+		Secretaire s=em.find(Secretaire.class, id);
 		
-		em.remove(d);
+		em.remove(s);
 		
 		em.getTransaction().commit();
 		em.close();
 	}
-	
-	
 }

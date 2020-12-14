@@ -1,7 +1,7 @@
 package dao;
 
-import model.Admin;
+import model.Secretaire;
 
-public interface IDAOSecretaire extends IDAO<Admin,Integer> {
+public interface IDAOSecretaire extends IDAO<Secretaire,Integer> {
 
 }

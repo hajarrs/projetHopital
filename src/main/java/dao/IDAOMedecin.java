@@ -1,7 +1,7 @@
 package dao;
 
-import model.Album;
+import model.Medecin;
 
-public interface IDAOMedecin extends IDAO<Album,Integer> {
+public interface IDAOMedecin extends IDAO<Medecin,Integer> {
 
 }

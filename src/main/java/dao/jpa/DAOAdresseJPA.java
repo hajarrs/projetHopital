@@ -1,4 +1,4 @@
-package model;
+package dao.jpa;
 
 import java.util.List;
 
@@ -6,31 +6,30 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import config.Context;
-import dao.DAOPatient;
-import model.Compte;
+import dao.IDAOAdresse;
+import model.Adresse;
 
-public class DAOCompteJPA implements DAOPatient {
-
+public class DAOAdresseJPA implements IDAOAdresse{
 	@Override
-	public Compte findById(Integer id) {
+	public Adresse findById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Compte b = em.find(Compte.class, id);
+		Adresse a = em.find(Adresse.class, id);
 		em.close();
-		return b;
+		return a;
 	}
 
 	@Override
-	public List<Compte> findAll() {
+	public List<Adresse> findAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Compte",Compte.class);
+		Query maRequete = em.createQuery("from Adresse",Adresse.class);
 
 		return maRequete.getResultList();
 	}
 
 
 	@Override
-	public void insert(Compte objet) {
+	public void insert(Adresse objet) {
 
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
@@ -40,7 +39,7 @@ public class DAOCompteJPA implements DAOPatient {
 	}
 
 	@Override
-	public Compte update(Compte objet) {
+	public Adresse update(Adresse objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -50,7 +49,7 @@ public class DAOCompteJPA implements DAOPatient {
 	}
 
 	@Override
-	public void delete(Compte objet) {
+	public void delete(Adresse objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -64,26 +63,11 @@ public class DAOCompteJPA implements DAOPatient {
 	public void deleteById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
-		Compte d=em.find(Compte.class, id);
+		Adresse a=em.find(Adresse.class, id);
 		
-		em.remove(d);
+		em.remove(a);
 		
 		em.getTransaction().commit();
 		em.close();
 	}
-	public static Compte checkConnect(String pseudo, String password) {
-		{
-		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-
-		Query maRequete = em.createQuery("from Compte c where c.password=:password and c.pseudo=:pseudo",Compte.class);
-
-		maRequete.setParameter("pseudo", pseudo);
-		maRequete.setParameter("password", password);
-
-		return (Compte)maRequete.getSingleResult();
-
-
-
-
-		}}}
-
+}

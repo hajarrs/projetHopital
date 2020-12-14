@@ -6,31 +6,32 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import config.Context;
-import dao.DAOPatient;
-import model.Compte;
+import dao.IDAOMedecin;
+import model.Medecin;
 
-public class DAOMedecinJPA implements DAOPatient {
+
+public class DAOMedecinJPA implements IDAOMedecin {
 
 	@Override
-	public Compte findById(Integer id) {
+	public Medecin findById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
-		Compte b = em.find(Compte.class, id);
+		Medecin m = em.find(Medecin.class, id);
 		em.close();
-		return b;
+		return m;
 	}
 
 	@Override
-	public List<Compte> findAll() {
+	public List<Medecin> findAll() {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Compte",Compte.class);
+		Query maRequete = em.createQuery("from Medecin",Medecin.class);
 
 		return maRequete.getResultList();
 	}
 
 
 	@Override
-	public void insert(Compte objet) {
+	public void insert(Medecin objet) {
 
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
@@ -40,7 +41,7 @@ public class DAOMedecinJPA implements DAOPatient {
 	}
 
 	@Override
-	public Compte update(Compte objet) {
+	public Medecin update(Medecin objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -50,7 +51,7 @@ public class DAOMedecinJPA implements DAOPatient {
 	}
 
 	@Override
-	public void delete(Compte objet) {
+	public void delete(Medecin objet) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
 		objet=em.merge(objet);
@@ -64,26 +65,33 @@ public class DAOMedecinJPA implements DAOPatient {
 	public void deleteById(Integer id) {
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 		em.getTransaction().begin();
-		Compte d=em.find(Compte.class, id);
+		Medecin d=em.find(Admin.class, id);
 		
 		em.remove(d);
 		
 		em.getTransaction().commit();
 		em.close();
 	}
-	public static Compte checkConnect(String pseudo, String password) {
-		{
-		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Query maRequete = em.createQuery("from Compte c where c.password=:password and c.pseudo=:pseudo",Compte.class);
+	public Medecin findById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		maRequete.setParameter("pseudo", pseudo);
-		maRequete.setParameter("password", password);
+	public void insert(Medecin objet) {
+		// TODO Auto-generated method stub
+		
+	}
 
-		return (Compte)maRequete.getSingleResult();
+	public Medecin update(Medecin objet) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-
-
-
-		}}}
-
+	public void delete(Medecin objet) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+}

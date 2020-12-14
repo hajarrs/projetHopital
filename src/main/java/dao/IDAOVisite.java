@@ -1,9 +1,7 @@
 package dao;
 
-import model.Bibliotheque;
+import model.Visite;
 
-public interface IDAOVisite extends IDAO<Bibliotheque,Integer>{
+public interface IDAOVisite extends IDAO<Visite,Integer> {
 
-	
-	public Bibliotheque selectByIdCompte(Integer id);
 }

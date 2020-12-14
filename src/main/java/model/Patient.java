@@ -1,10 +1,20 @@
 package model;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+
 public class Patient {
 	
+	@Id
 	private int numeroSecu;
 	private String nom;
 	private String prenom;
+	
+	@Embedded
+	private Adresse adresse;
 	
 	
 	public Patient(int numeroSecu, String nom, String prenom) {

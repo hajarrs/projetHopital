@@ -1,5 +1,10 @@
 package model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("Medecin")
 public class Medecin extends Compte{
 	
 	private int salle;

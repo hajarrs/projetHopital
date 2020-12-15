@@ -2,13 +2,12 @@ package model;
 
 import java.time.LocalDate;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,19 +17,19 @@ public class Visite {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private double cout;
+	private int cout;
 	private int numeroSalle;
 	private LocalDate dateVisite;
 	@ManyToOne
 	private Medecin medecin;
 	@ManyToOne
+	@JoinColumn(name="numSecu")
 	private Patient patient;
 	
 	
 	
-	public Visite(int id, double cout, int numeroSalle, LocalDate dateVisite) {
-		//super();
-		this.id = id;
+	public Visite(int cout, int numeroSalle, LocalDate dateVisite, Patient patient) {
+		this.patient = patient;
 		this.cout = cout;
 		this.numeroSalle = numeroSalle;
 		this.dateVisite = dateVisite;
@@ -38,10 +37,10 @@ public class Visite {
 	public Visite() {
 		
 	}
-	public double getCout() {
+	public int getCout() {
 		return cout;
 	}
-	public void setCout(double cout) {
+	public void setCout(int cout) {
 		this.cout = cout;
 	}
 	public int getNumeroSalle() {

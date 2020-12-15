@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import config.Context;
 import dao.IDAOPatient;
 import model.Patient;
+import model.Visite;
 
 public class DAOPatientJPA implements IDAOPatient{
 	@Override
@@ -60,7 +61,15 @@ public class DAOPatientJPA implements IDAOPatient{
 		em.getTransaction().commit();
 		em.close();
 	}
+	@Override
+	public Patient findWithVisit(Integer id) {
+		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
+		Query maRequete = em.createQuery("select p from Patient p join p.visite where p.numeroSecu= :numSecu",Patient.class);
+		maRequete.setParameter("numSecu", id);
+
+		return (Patient)maRequete.getSingleResult();
+	}
 }
 
 

@@ -7,6 +7,7 @@ import javax.persistence.Query;
 
 import config.Context;
 import dao.IDAOVisite;
+import model.Patient;
 import model.Visite;
 
 
@@ -62,4 +63,6 @@ public class DAOVisiteJPA implements IDAOVisite {
 		em.getTransaction().commit();
 		em.close();
 	}
+
+
 }

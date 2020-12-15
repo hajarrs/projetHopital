@@ -54,6 +54,7 @@ public class Test{
 		Context.getInstance().getDaoVisite().insert(v3);
 		Context.getInstance().getDaoVisite().insert(v2);
 		Context.getInstance().getDaoVisite().insert(v4);
+		
 		Context.getInstance().getFileAttente().add(p1);
 		Context.getInstance().getFileAttente().add(p2);
 	}
@@ -106,7 +107,6 @@ public class Test{
 				try(FileInputStream fis = new FileInputStream(monFichier);
 					ObjectInputStream ois = new ObjectInputStream(fis);) {
 					Context.getInstance().setFileAttente((LinkedList<Patient>) ois.readObject());
-
 				} catch (IOException | ClassNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -137,10 +137,17 @@ public class Test{
 		}
 		menuMedecin();
 	}
+	private static void afficherVisite() {
+		for(Visite v1 : Context.getInstance().getDaoMedecin().findById(connected.getId()).getVisite()) {
+			System.out.println(v1.getPatient().getNumeroSecu()+"\t"+v1.getPatient().getNom()+"\t"+v1.getPatient().getPrenom());
+		}
+		
+	}
+
 	//les methodes utilisees
 	private static void rendreSalleDispo() {
 		System.out.println("------------------------------------------------");
-		Patient p = Context.getInstance().getFileAttente().poll();
+		Patient p = Context.getInstance().getFileAttente().peek();
 		System.out.println("La salle N°"+Context.getInstance().getDaoMedecin().findById(connected.getId()).getSalle()+" est disponible");
 		System.out.println("Prochain patient: \nNom: "+p.getNom()+"\nPrenom: "+p.getPrenom());
 	}
@@ -149,7 +156,8 @@ public class Test{
 		System.out.println("------------------------------------------------");
 		Patient p = Context.getInstance().getFileAttente().poll();
 		Visite v = new Visite(20, Context.getInstance().getDaoMedecin().findById(connected.getId()).getSalle(), LocalDate.now(), Context.getInstance().getDaoMedecin().findById(connected.getId()), p);
-		//Context.getInstance().getDaoMedecin().findById(connected.getId()).getVisite().add(v);
+		Context.getInstance().getDaoMedecin().findById(connected.getId()).getVisite().add(v);
+
 		System.out.println("Patient Ajoute");
 	}
 
@@ -190,13 +198,13 @@ public class Test{
 			Patient p1 = new Patient(numeroSecu, nom, prenom,a);
 			Context.getInstance().getFileAttente().add(p1);
 			Context.getInstance().getDaoPatient().insert(p1);
-			Context.getInstance().getFileAttente().add(p1);
 		}else {
 			Patient p =Context.getInstance().getDaoPatient().findById(numeroSecu);
 			System.out.println("\nCe patient existe déjà dans la base de l'hopital\n");
 			System.out.println("Numero de securite: "+p.getNumeroSecu()+"\nNom:" +p.getNom()+"\nPrenom: "+p.getPrenom()+
 					"\nAdresse:\nNumero: "+p.getAdresse().getNumero()+"\nVoie: "+p.getAdresse().getVoie()+"\nVille: "+
 					p.getAdresse().getVille()+"\nCP: "+p.getAdresse().getCp());
+			Context.getInstance().getFileAttente().add(p);
 		}
 	}
 
@@ -207,7 +215,8 @@ public class Test{
 				System.out.println("Patient N°"+(Context.getInstance().getFileAttente().indexOf(p)+1)+" [numeroSecu=" + p.getNumeroSecu() + ", nom=" + p.getNom() + ", prenom=" + p.getPrenom() + ", adresse=" + p.getAdresse()
 						+ "]");
 			}
-		}else System.out.println("Il n' y a personne dans la salle d'attente");
+		}else if(Context.getInstance().getFileAttente().size()==0) System.out.println("Secretaire en Pause");
+		else System.out.println("Il n' y a personne dans la salle d'attente");
 		
 	}
 
@@ -220,7 +229,7 @@ public class Test{
 		Patient p = Context.getInstance().getDaoPatient().findWithVisit(numSecu);
 		
 		for(Visite v :  p.getVisite()) {
-			System.out.println(v);
+			System.out.println("Visite [cout=" + v.getCout() + ", numeroSalle=" + v.getNumeroSalle() + ", dateVisite=" + v.getDateVisite()+ "]");
 		}
 		
 	}

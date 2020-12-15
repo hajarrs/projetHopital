@@ -3,8 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -12,7 +14,7 @@ import javax.persistence.OneToMany;
 public class Medecin extends Compte{
 	
 	private int salle;
-	@OneToMany(mappedBy = "medecin")
+	@OneToMany(mappedBy = "medecin",fetch = FetchType.EAGER)
 	private List<Visite> visite = new ArrayList();
 
 	public Medecin() {

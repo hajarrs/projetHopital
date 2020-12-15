@@ -6,13 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import config.Context;
 import dao.jpa.DAOCompteJPA;
@@ -23,7 +22,7 @@ import model.Patient;
 import model.Secretaire;
 import model.Visite;
 
-public class Test implements Serializable {
+public class Test{
 
 	static Compte connected=null;
 	
@@ -40,23 +39,23 @@ public class Test implements Serializable {
 		Patient p1 = new Patient(12, "Ram", "Sara",a1);
 		Patient p2 = new Patient(13, "Qai", "Laila",a2);
 		
-		Visite v1 = new Visite(20, 1, LocalDate.parse("2020-06-15"), p1);
-		Visite v2 = new Visite(20, 2, LocalDate.parse("2020-07-15"), p1);
-		Visite v3 = new Visite(20, 2, LocalDate.parse("2020-06-15"), p2);
-		Visite v4 = new Visite(20, 1, LocalDate.parse("2020-08-15"), p2);
+		Visite v1 = new Visite(20, 1, LocalDate.parse("2020-06-15"),m1, p1);
+		Visite v2 = new Visite(20, 2, LocalDate.parse("2020-07-15"), m2,p1);
+		Visite v3 = new Visite(20, 2, LocalDate.parse("2020-06-15"), m2,p2);
+		Visite v4 = new Visite(20, 1, LocalDate.parse("2020-08-15"),m1, p2);
 		
 		
 		Context.getInstance().getDaoCompte().insert(m1);
 		Context.getInstance().getDaoCompte().insert(m2);
 		Context.getInstance().getDaoSecretaire().insert(s);
-		Context.get_instance().getDaoPatient().insert(p1);
-		Context.get_instance().getDaoPatient().insert(p2);
-		Context.get_instance().getDaoVisite().insert(v1);
-		Context.get_instance().getDaoVisite().insert(v3);
-		Context.get_instance().getDaoVisite().insert(v2);
-		Context.get_instance().getDaoVisite().insert(v4);
-		Context.get_instance().getFileAttente().add(p1);
-		Context.get_instance().getFileAttente().add(p2);
+		Context.getInstance().getDaoPatient().insert(p1);
+		Context.getInstance().getDaoPatient().insert(p2);
+		Context.getInstance().getDaoVisite().insert(v1);
+		Context.getInstance().getDaoVisite().insert(v3);
+		Context.getInstance().getDaoVisite().insert(v2);
+		Context.getInstance().getDaoVisite().insert(v4);
+		Context.getInstance().getFileAttente().add(p1);
+		Context.getInstance().getFileAttente().add(p2);
 	}
 	
 	public static int saisieInt(String msg) 
@@ -101,6 +100,17 @@ public class Test implements Serializable {
 			}
 			else if(connected instanceof Secretaire) 
 			{
+				System.out.println("Connectee");
+				File monFichier = new File("file_Attente.rtf");
+				
+				try(FileInputStream fis = new FileInputStream(monFichier);
+					ObjectInputStream ois = new ObjectInputStream(fis);) {
+					Context.getInstance().setFileAttente((LinkedList<Patient>) ois.readObject());
+
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
 				menuSecretaire();
 
 			}
@@ -112,6 +122,7 @@ public class Test implements Serializable {
 	}
 
 	private static void menuMedecin() {
+		System.out.println("------------------------------------------------");
 		
 		System.out.println("Bienvenu dans le menu Medecin");
 		int choix = saisieInt("Veuillez faire un choix:\n1 - Rendre la salle disponible\n2 - Visualiser la salle d'attente"
@@ -119,7 +130,7 @@ public class Test implements Serializable {
 		
 		switch(choix) {
 		case 1 : rendreSalleDispo(); break;
-		case 2 : visualiserSalle(); break;
+		case 2 : etatFileAttente(); break;
 		case 3 : sauvegarderListe();break;
 		case 4 : menuGlobal();break;
 		case 5 : System.exit(0); break;
@@ -128,20 +139,22 @@ public class Test implements Serializable {
 	}
 	//les methodes utilisees
 	private static void rendreSalleDispo() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("------------------------------------------------");
+		Patient p = Context.getInstance().getFileAttente().poll();
+		System.out.println("La salle N°"+Context.getInstance().getDaoMedecin().findById(connected.getId()).getSalle()+" est disponible");
+		System.out.println("Prochain patient: \nNom: "+p.getNom()+"\nPrenom: "+p.getPrenom());
 	}
 
-	private static void visualiserSalle() {
-		// TODO Auto-generated method stub
-		
-	}
 	private static void sauvegarderListe() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("------------------------------------------------");
+		Patient p = Context.getInstance().getFileAttente().poll();
+		Visite v = new Visite(20, Context.getInstance().getDaoMedecin().findById(connected.getId()).getSalle(), LocalDate.now(), Context.getInstance().getDaoMedecin().findById(connected.getId()), p);
+		//Context.getInstance().getDaoMedecin().findById(connected.getId()).getVisite().add(v);
+		System.out.println("Patient Ajoute");
 	}
 
 	private static void menuSecretaire() {
+		System.out.println("------------------------------------------------");
 		System.out.println("Bienvenu dans le menu Secretaire");
 		int choix = saisieInt("Veuillez faire un choix:\n1 - Ajouter un patient\n2 - Afficher l'etat de la file"
 				+ " d'attente\n3 - Retourner la liste de l'historique de visites\n4 - Partir en Pause\n5 - Quitter\n6 - Se deconnecter");
@@ -159,27 +172,39 @@ public class Test implements Serializable {
 
 
 	private static void ajouterPatient() {
-		int numeroSecu = saisieInt("Veuillez entrer les donnees:\nNumero de securite:");
-		String nom = saisieString("Nom:");
-		String prenom = saisieString("Prenom:");
-		int numero = saisieInt("L'adresse:\nNumero:");
-		String voie = saisieString("Voie:");
-		String ville = saisieString("Ville");
-		int cp = saisieInt("CP:");
-		Adresse a= new Adresse(numero, voie, ville, cp);
-		Patient p = new Patient(numeroSecu, nom, prenom,a);
-		Context.get_instance().getFileAttente().add(p);
-		Context.get_instance().getDaoPatient().insert(p);
-		Context.get_instance().getFileAttente().add(p);
-		//Visite v = new Visite(20, numeroSalle, dateVisite);
-		//Context.get_instance().getDaoVisite().insert(v);
-		
+		boolean existe= false;
+		System.out.println("------------------------------------------------");
+		int numeroSecu = saisieInt("Numero de securite:");
+		List <Patient> listePatient = Context.getInstance().getDaoPatient().findAll();
+		for(int i=0; i<listePatient.size(); i++) {
+			if(listePatient.get(i).getNumeroSecu()== numeroSecu) existe=true;
+		}
+		if(!existe) {
+			String nom = saisieString("Nom:");
+			String prenom = saisieString("Prenom:");
+			int numero = saisieInt("L'adresse:\nNumero:");
+			String voie = saisieString("Voie:");
+			String ville = saisieString("Ville");
+			int cp = saisieInt("CP:");
+			Adresse a= new Adresse(numero, voie, ville, cp);
+			Patient p1 = new Patient(numeroSecu, nom, prenom,a);
+			Context.getInstance().getFileAttente().add(p1);
+			Context.getInstance().getDaoPatient().insert(p1);
+			Context.getInstance().getFileAttente().add(p1);
+		}else {
+			Patient p =Context.getInstance().getDaoPatient().findById(numeroSecu);
+			System.out.println("\nCe patient existe déjà dans la base de l'hopital\n");
+			System.out.println("Numero de securite: "+p.getNumeroSecu()+"\nNom:" +p.getNom()+"\nPrenom: "+p.getPrenom()+
+					"\nAdresse:\nNumero: "+p.getAdresse().getNumero()+"\nVoie: "+p.getAdresse().getVoie()+"\nVille: "+
+					p.getAdresse().getVille()+"\nCP: "+p.getAdresse().getCp());
+		}
 	}
 
 	private static void etatFileAttente() {
-		if(Context.get_instance().getFileAttente()!=null) {
-			for(Patient p: Context.get_instance().getFileAttente()) {
-				System.out.println("Patient N°"+(Context.get_instance().getFileAttente().indexOf(p)+1)+" [numeroSecu=" + p.getNumeroSecu() + ", nom=" + p.getNom() + ", prenom=" + p.getPrenom() + ", adresse=" + p.getAdresse()
+		System.out.println("------------------------------------------------");
+		if(Context.getInstance().getFileAttente()!=null) {
+			for(Patient p: Context.getInstance().getFileAttente()) {
+				System.out.println("Patient N°"+(Context.getInstance().getFileAttente().indexOf(p)+1)+" [numeroSecu=" + p.getNumeroSecu() + ", nom=" + p.getNom() + ", prenom=" + p.getPrenom() + ", adresse=" + p.getAdresse()
 						+ "]");
 			}
 		}else System.out.println("Il n' y a personne dans la salle d'attente");
@@ -187,11 +212,12 @@ public class Test implements Serializable {
 	}
 
 	private static void listeHistorique() {
+		System.out.println("------------------------------------------------");
 		etatFileAttente();
 		int numSecu = saisieInt("Quel est le numéro de securite du patient?");
 		EntityManager em=Context.getInstance().getEmf().createEntityManager();
 
-		Patient p = Context.get_instance().getDaoPatient().findWithVisit(numSecu);
+		Patient p = Context.getInstance().getDaoPatient().findWithVisit(numSecu);
 		
 		for(Visite v :  p.getVisite()) {
 			System.out.println(v);
@@ -200,50 +226,25 @@ public class Test implements Serializable {
 	}
 
 	private static void partirEnPause() {
-		// TODO Auto-generated method stub
+		System.out.println("------------------------------------------------");
+		File monFichier = new File("file_Attente.rtf");
+		try(FileOutputStream fos = new FileOutputStream(monFichier);
+				ObjectOutputStream oos = new ObjectOutputStream(fos);) {
+				oos.writeObject(Context.getInstance().getFileAttente());;
+				Context.getInstance().getFileAttente().clear();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		
+		menuGlobal();
 		
 	}
 
-	public static void ecrireObject(Patient p) {
-		String chemin = "/Users/hajarelboumtiri/Desktop/file_Attente.rtf"; 
-		File monFichier = new File(chemin);
-		
-		
-		try(FileOutputStream fos = new FileOutputStream(monFichier);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);) {
-			
-			oos.writeObject(p);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-	
-	public static void lireObject() {
-		String chemin = "/Users/hajarelboumtiri/Desktop/file_Attente.rtf"; 
-		File monFichier = new File(chemin);
-		
-		Patient p = new Patient();
-		
-		try(FileInputStream fis = new FileInputStream(monFichier);
-			ObjectInputStream ois = new ObjectInputStream(fis);) {
-			p= (Patient) ois.readObject();
-			System.out.println(p);
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
+
 	
 	public static void main(String[] args) {
 		baseHopital();
 		menuGlobal();
-		
-
 	}
 
 }

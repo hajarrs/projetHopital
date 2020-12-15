@@ -14,16 +14,8 @@ public class Medecin extends Compte{
 	private int salle;
 	@OneToMany(mappedBy = "medecin")
 	private List<Visite> visite = new ArrayList();
-	public int getSalle() {
-		return salle;
-	}
-
-	public void setSalle(int salle) {
-		this.salle = salle;
-	}
 
 	public Medecin() {
-		
 		
 		
 	}
@@ -40,7 +32,14 @@ public class Medecin extends Compte{
 	public void setVisite(List<Visite> visite) {
 		this.visite = visite;
 	}
-	
+
+
+	public void setSalle(int salle) {
+		this.salle = salle;
+	}
+	public int getSalle() {
+		return salle;
+	}
 	
 
 }

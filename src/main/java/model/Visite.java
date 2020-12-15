@@ -28,7 +28,8 @@ public class Visite {
 	
 	
 	
-	public Visite(int cout, int numeroSalle, LocalDate dateVisite, Patient patient) {
+	public Visite(int cout, int numeroSalle, LocalDate dateVisite,Medecin medecin, Patient patient) {
+		this.medecin=medecin;
 		this.patient = patient;
 		this.cout = cout;
 		this.numeroSalle = numeroSalle;

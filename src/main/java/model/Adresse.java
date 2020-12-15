@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Adresse {
+public class Adresse implements Serializable{
 	
 	private int numero;
 	private String voie;

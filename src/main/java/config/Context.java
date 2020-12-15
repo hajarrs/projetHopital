@@ -52,10 +52,6 @@ public class Context {
 		emf.close();
 	}
 
-	public static Context get_instance() {
-		return _instance;
-	}
-	
 
 	public IDAOCompte getDaoCompte() {
 		return daoCompte;
@@ -79,6 +75,10 @@ public class Context {
 
 	public LinkedList<Patient> getFileAttente() {
 		return fileAttente;
+	}
+
+	public void setFileAttente(LinkedList<Patient> fileAttente) {
+		this.fileAttente = fileAttente;
 	}
 	
 }

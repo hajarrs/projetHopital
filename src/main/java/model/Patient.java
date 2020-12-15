@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 
-public class Patient {
+public class Patient implements Serializable{
 	
 	@Id
 	private int numeroSecu;
@@ -19,7 +20,7 @@ public class Patient {
 	private String prenom;
 	
 	@Embedded
-	private Adresse adresse;
+	private Adresse adresse; //transient apres private si on ne veut pas serialiser cette attribut
 	
 	//@OneToMany(mappedBy = "patient", fetch = FetchType.EAGER) si je veux à chaque fois récuperer la liste de visites avec le patient une fois on recupere le patient par selectById sinon faire findWithVisit()
 	@OneToMany(mappedBy = "patient")
